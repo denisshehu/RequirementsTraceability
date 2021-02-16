@@ -1,5 +1,6 @@
 public class RequirementsTraceability {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        String datasetName = "dataset-1";
+        Data data = new Data(datasetName);
     }
 }
