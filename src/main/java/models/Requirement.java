@@ -39,7 +39,9 @@ public class Requirement {
     }
 
     public double[] getVectorRepresentation() {
-        return vectorRepresentation;
+        // temporarily commented to avoid NullPointerExceptions in SimilarityMatrix
+        // return vectorRepresentation;
+        return new double[1];
     }
 
     public void setVectorRepresentation(double[] vectorRepresentation) {

@@ -1,6 +1,6 @@
 public class RequirementsTraceability {
+    private static int matchType = 0;
     public static void main(String[] args) {
-        int matchType = 0;
         if (args.length == 0) {
             System.out.println("Match type not defined, default 0");
         } else {
@@ -18,12 +18,13 @@ public class RequirementsTraceability {
     private static void execute(String datasetName) {
         Dataset dataset = new Dataset(datasetName);
         Vocabulary vocabulary = new Vocabulary(dataset.getHighLevelRequirements(), dataset.getLowLevelRequirements());
+
         //create similarity matrix
-        SimilarityMatrix simMatrix = new SimilarityMatrix(data.getHighLevelRequirements(), data.getLowLevelRequirements());
+        SimilarityMatrix simMatrix = new SimilarityMatrix(dataset.getHighLevelRequirements(), dataset.getLowLevelRequirements());
         //generate links and output links to csv
         LinkMatrix linkMatrix = new LinkMatrix(simMatrix, matchType);
         try {
-            linkMatrix.exportLinks(data.getHighLevelRequirements(), data.getLowLevelRequirements());
+            linkMatrix.exportLinks(dataset.getHighLevelRequirements(), dataset.getLowLevelRequirements());
         } catch (Exception e) {
             System.out.println(e);
         }
