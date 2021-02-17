@@ -7,6 +7,8 @@ import smile.nlp.stemmer.LancasterStemmer;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -19,9 +21,8 @@ public class Dataset {
         this.highLevelRequirements = new ArrayList<>();
         this.lowLevelRequirements = new ArrayList<>();
 
-        String datasetDirectory = System.getProperty("user.dir") + "\\src\\main\\resources\\" + datasetName + "\\";
-        processDataset(datasetDirectory + "high.csv", true);
-        processDataset(datasetDirectory + "low.csv", false);
+        processDataset("dataset-1/high.csv", true);
+        processDataset("dataset-1/low.csv", false);
     }
 
     public ArrayList<Requirement> getHighLevelRequirements() {
@@ -33,7 +34,11 @@ public class Dataset {
     }
 
     private void processDataset(String fileDirectory, boolean isHighLevel) {
-        try (CSVReader reader = new CSVReader(new FileReader(fileDirectory))) {
+
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        InputStream stream = loader.getResourceAsStream(fileDirectory);
+
+        try (CSVReader reader = new CSVReader(new InputStreamReader(stream))) {
 
             List<String[]> dataset = reader.readAll();
             dataset.remove(0);
