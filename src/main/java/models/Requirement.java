@@ -6,6 +6,7 @@ public class Requirement {
     private RequirementLevel level;
     private String ID;
     private ArrayList<String> text;
+    private double[] vectorRepresentation;
 
     public Requirement(RequirementLevel level, String ID, ArrayList<String> text) {
         this.level = level;
@@ -35,5 +36,13 @@ public class Requirement {
 
     public void setText(ArrayList<String> text) {
         this.text = text;
+    }
+
+    public double[] getVectorRepresentation() {
+        return vectorRepresentation;
+    }
+
+    public void setVectorRepresentation(double[] vectorRepresentation) {
+        this.vectorRepresentation = vectorRepresentation;
     }
 }

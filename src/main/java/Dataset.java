@@ -11,17 +11,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class Data {
+public class Dataset {
     private final ArrayList<Requirement> highLevelRequirements;
     private final ArrayList<Requirement> lowLevelRequirements;
 
-    public Data(String datasetName) {
+    public Dataset(String datasetName) {
         this.highLevelRequirements = new ArrayList<>();
         this.lowLevelRequirements = new ArrayList<>();
 
         String datasetDirectory = System.getProperty("user.dir") + "\\src\\main\\resources\\" + datasetName + "\\";
         processDataset(datasetDirectory + "high.csv", true);
         processDataset(datasetDirectory + "low.csv", false);
+    }
+
+    public ArrayList<Requirement> getHighLevelRequirements() {
+        return highLevelRequirements;
+    }
+
+    public ArrayList<Requirement> getLowLevelRequirements() {
+        return lowLevelRequirements;
     }
 
     private void processDataset(String fileDirectory, boolean isHighLevel) {
@@ -49,10 +57,20 @@ public class Data {
     private ArrayList<String> preprocess(String text) {
         ArrayList<String> result = tokenize(text);
         result.removeIf(EnglishStopWords.DEFAULT::contains);
+
         LancasterStemmer stemmer = new LancasterStemmer();
+
         for (int i = 0; i < result.size(); i++) {
-            result.set(i, stemmer.stem(result.get(i)));
+            String stemmed = stemmer.stem(result.get(i));
+
+            if (stemmed.length() == 0) {
+                result.remove(i);
+                i--;
+            } else {
+                result.set(i, stemmed);
+            }
         }
+
         return result;
     }
 
