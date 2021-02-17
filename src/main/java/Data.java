@@ -16,6 +16,7 @@ public class Data {
     private final ArrayList<Requirement> lowLevelRequirements;
 
     public Data(String datasetName) {
+        // TODO Change used directory (for IO)  to the /input and /output folder (those are used by the assignment)
         this.highLevelRequirements = new ArrayList<>();
         this.lowLevelRequirements = new ArrayList<>();
 
@@ -65,5 +66,13 @@ public class Data {
         }
 
         return result;
+    }
+
+    public ArrayList<Requirement> getHighLevelRequirements() {
+        return highLevelRequirements;
+    }
+
+    public ArrayList<Requirement> getLowLevelRequirements() {
+        return lowLevelRequirements;
     }
 }

@@ -36,4 +36,11 @@ public class Requirement {
     public void setText(ArrayList<String> text) {
         this.text = text;
     }
+
+    // TODO implement vector representation
+    public double[] getVectorRepresentation() {
+        double[] temp = new double[1];
+        temp[0] = 1;
+        return temp;
+    }
 }
