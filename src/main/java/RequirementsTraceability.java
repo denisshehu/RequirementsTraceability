@@ -11,9 +11,13 @@ public class RequirementsTraceability {
             }
         }
 
-        // TODO make program work properly with docker command
         String datasetName = "dataset-1";
-        Data data = new Data(datasetName);
+        execute(datasetName);
+    }
+
+    private static void execute(String datasetName) {
+        Dataset dataset = new Dataset(datasetName);
+        Vocabulary vocabulary = new Vocabulary(dataset.getHighLevelRequirements(), dataset.getLowLevelRequirements());
         //create similarity matrix
         SimilarityMatrix simMatrix = new SimilarityMatrix(data.getHighLevelRequirements(), data.getLowLevelRequirements());
         //generate links and output links to csv
