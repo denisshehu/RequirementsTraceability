@@ -5,7 +5,6 @@ import models.RequirementLevel;
 import smile.nlp.dictionary.EnglishStopWords;
 import smile.nlp.stemmer.LancasterStemmer;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
