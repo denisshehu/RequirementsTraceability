@@ -1,11 +1,14 @@
 import models.Requirement;
+
 import java.util.ArrayList;
 
 public class SimilarityMatrix {
     private final double[][] simMatrix;
-    // TODO replace getVectorRep with correct name once implemented
+
     public SimilarityMatrix(ArrayList<Requirement> highLevelReqs, ArrayList<Requirement> lowLevelReqs) {
+
         simMatrix = new double[highLevelReqs.size()][lowLevelReqs.size()];
+
         for (int i = 0; i < highLevelReqs.size(); i++) {
             for (int j = 0; j < lowLevelReqs.size(); j++) {
                 simMatrix[i][j] = cossim(highLevelReqs.get(i).getVectorRepresentation(),

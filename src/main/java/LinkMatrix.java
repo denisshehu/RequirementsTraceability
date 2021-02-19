@@ -1,14 +1,16 @@
-import java.io.FileWriter;
 import com.opencsv.CSVWriter;
 import models.Requirement;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class LinkMatrix {
     private final boolean[][] linkMatrix;
+
     public LinkMatrix(SimilarityMatrix simMatrix, int matchType) {
         linkMatrix = new boolean[simMatrix.getRows()][simMatrix.getColumns()];
+
         // TODO add case 3 for custom link detection if applicable
         switch (matchType) {
             case 1 -> minSimScoreLinks(simMatrix, 0.25);
@@ -17,31 +19,42 @@ public class LinkMatrix {
         }
     }
 
-    // TODO check if the format is correct
     /*
     Exports the linkMatrix to a csv file in the format defined in the assignment
      */
-    public void exportLinks(ArrayList<Requirement> highLevelRequirements, ArrayList<Requirement> lowLevelRequirements) throws Exception {
-        CSVWriter writer = new CSVWriter(new FileWriter(".\\output\\links.csv"));
-        List list = new ArrayList();
-        for (int i = 0; i < linkMatrix.length; i++) {
-            ArrayList<String> line = new ArrayList<>();
-            line.add(highLevelRequirements.get(i).getID());
-            for (int j = 0; j < linkMatrix[0].length; j++) {
-                if (linkMatrix[i][j]) {
-                    line.add(lowLevelRequirements.get(j).getID());
+    public void exportLinks(ArrayList<Requirement> highLevelRequirements, ArrayList<Requirement> lowLevelRequirements) {
+
+        try {
+
+            CSVWriter writer = new CSVWriter(new FileWriter(".\\output\\links.csv"));
+            ArrayList<String[]> links = new ArrayList<>();
+
+            for (int i = 0; i < linkMatrix.length; i++) {
+
+                String[] link = new String[2];
+                link[0] = highLevelRequirements.get(i).getID();
+
+                link[1] = "";
+                for (int j = 0; j < linkMatrix[0].length; j++) {
+                    if (linkMatrix[i][j]) {
+                        link[1] += lowLevelRequirements.get(j).getID() + ",";
+                    }
                 }
+
+                if (link[1].length() != 0) {
+                    link[1] = link[1].substring(0, link[1].length() - 1);
+                }
+
+                links.add(link);
             }
-            String[] lineArray = new String[line.size()];
-            for (int j = 0; j < line.size(); j++) {
-                lineArray[j] = line.get(j);
-            }
-            list.add(lineArray);
+
+            writer.writeAll(links);
+            writer.flush();
+            System.out.println("Links exported");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        //temp
-        writer.writeAll(list);
-        writer.flush();
-        System.out.println("Links exported");
+
     }
 
     /*

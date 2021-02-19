@@ -1,5 +1,6 @@
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
+import models.Dataset;
 import models.Requirement;
 import models.RequirementLevel;
 import smile.nlp.dictionary.EnglishStopWords;
@@ -12,50 +13,38 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class Dataset {
-    private final ArrayList<Requirement> highLevelRequirements;
-    private final ArrayList<Requirement> lowLevelRequirements;
+public class DatasetProcessor {
 
-    public Dataset(String datasetName) {
-        this.highLevelRequirements = new ArrayList<>();
-        this.lowLevelRequirements = new ArrayList<>();
-
-        processDataset("dataset-1/high.csv", true);
-        processDataset("dataset-1/low.csv", false);
+    public void process(Dataset dataset, String datasetName) {
+        ArrayList<Requirement> requirements = process(datasetName + "/high.csv", RequirementLevel.HIGH);
+        requirements.addAll(process(datasetName + "/low.csv", RequirementLevel.LOW));
+        dataset.setRequirements(requirements);
     }
 
-    public ArrayList<Requirement> getHighLevelRequirements() {
-        return highLevelRequirements;
-    }
+    private ArrayList<Requirement> process(String fileDirectory, RequirementLevel requirementLevel) {
 
-    public ArrayList<Requirement> getLowLevelRequirements() {
-        return lowLevelRequirements;
-    }
-
-    private void processDataset(String fileDirectory, boolean isHighLevel) {
+        ArrayList<Requirement> result = new ArrayList<>();
 
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         InputStream stream = loader.getResourceAsStream(fileDirectory);
 
-        try (CSVReader reader = new CSVReader(new InputStreamReader(stream))) {
+        try {
+            assert stream != null;
+            try (CSVReader reader = new CSVReader(new InputStreamReader(stream))) {
 
-            List<String[]> dataset = reader.readAll();
-            dataset.remove(0);
+                List<String[]> dataset = reader.readAll();
+                dataset.remove(0);
 
-            if (isHighLevel) {
                 dataset.forEach(x -> {
                     ArrayList<String> text = preprocess(x[1]);
-                    highLevelRequirements.add(new Requirement(RequirementLevel.HIGH, x[0], text));
-                });
-            } else {
-                dataset.forEach(x -> {
-                    ArrayList<String> text = preprocess(x[1]);
-                    lowLevelRequirements.add(new Requirement(RequirementLevel.LOW, x[0], text));
+                    result.add(new Requirement(requirementLevel, x[0], text));
                 });
             }
         } catch (IOException | CsvException e) {
             System.out.println("ERROR: " + e.getMessage());
         }
+
+        return result;
     }
 
     private ArrayList<String> preprocess(String text) {

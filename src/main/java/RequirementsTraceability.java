@@ -1,5 +1,11 @@
+import models.Dataset;
+import models.Requirement;
+
+import java.util.ArrayList;
+
 public class RequirementsTraceability {
     private static int matchType = 0;
+
     public static void main(String[] args) {
         if (args.length == 0) {
             System.out.println("Match type not defined, default 0");
@@ -16,17 +22,20 @@ public class RequirementsTraceability {
     }
 
     private static void execute(String datasetName) {
-        Dataset dataset = new Dataset(datasetName);
-        Vocabulary vocabulary = new Vocabulary(dataset.getHighLevelRequirements(), dataset.getLowLevelRequirements());
+        Dataset dataset = new Dataset();
+        DatasetProcessor processor = new DatasetProcessor();
+        processor.process(dataset, datasetName);
+        VectorRepresentationGenerator generator = new VectorRepresentationGenerator();
+        generator.generate(dataset);
+
+        ArrayList<Requirement> highLevelRequirements = dataset.getHighLevelRequirements();
+        ArrayList<Requirement> lowLevelRequirements = dataset.getLowLevelRequirements();
 
         //create similarity matrix
-        SimilarityMatrix simMatrix = new SimilarityMatrix(dataset.getHighLevelRequirements(), dataset.getLowLevelRequirements());
+        SimilarityMatrix simMatrix = new SimilarityMatrix(highLevelRequirements, lowLevelRequirements);
+
         //generate links and output links to csv
         LinkMatrix linkMatrix = new LinkMatrix(simMatrix, matchType);
-        try {
-            linkMatrix.exportLinks(dataset.getHighLevelRequirements(), dataset.getLowLevelRequirements());
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+        linkMatrix.exportLinks(highLevelRequirements, lowLevelRequirements);
     }
 }
