@@ -1,8 +1,7 @@
 import com.opencsv.CSVWriter;
 import models.Requirement;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 public class LinkMatrix {
@@ -25,9 +24,12 @@ public class LinkMatrix {
     public void exportLinks(ArrayList<Requirement> highLevelRequirements, ArrayList<Requirement> lowLevelRequirements) {
 
         try {
+            // TODO: Use OutputStreamWriter (instead of FileWriter) because now this code does not work on docker!
+            // TODO: Only use double quotes for the list of low level requirements, just like the given links.csv file.
+            CSVWriter writer = new CSVWriter(new FileWriter("src/main/resources/output/links.csv"));
 
-            CSVWriter writer = new CSVWriter(new FileWriter(".\\output\\links.csv"));
             ArrayList<String[]> links = new ArrayList<>();
+            links.add(new String[] {"id", "links"});
 
             for (int i = 0; i < linkMatrix.length; i++) {
 

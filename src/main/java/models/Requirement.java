@@ -3,9 +3,9 @@ package models;
 import java.util.ArrayList;
 
 public class Requirement {
-    private RequirementLevel level;
-    private String ID;
-    private ArrayList<String> text;
+    private final RequirementLevel level;
+    private final String ID;
+    private final ArrayList<String> text;
     private double[] vectorRepresentation;
 
     public Requirement(RequirementLevel level, String ID, ArrayList<String> text) {
@@ -14,28 +14,22 @@ public class Requirement {
         this.text = text;
     }
 
-    public RequirementLevel getLevel() {
-        return level;
+    public Requirement(RequirementLevel level, String ID) {
+        this.level = level;
+        this.ID = ID;
+        text = new ArrayList<>();
     }
 
-    public void setLevel(RequirementLevel level) {
-        this.level = level;
+    public RequirementLevel getLevel() {
+        return level;
     }
 
     public String getID() {
         return ID;
     }
 
-    public void setID(String ID) {
-        this.ID = ID;
-    }
-
     public ArrayList<String> getText() {
         return text;
-    }
-
-    public void setText(ArrayList<String> text) {
-        this.text = text;
     }
 
     public double[] getVectorRepresentation() {

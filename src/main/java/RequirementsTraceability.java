@@ -1,3 +1,4 @@
+import models.ConfusionMatrix;
 import models.Dataset;
 import models.Requirement;
 
@@ -37,5 +38,15 @@ public class RequirementsTraceability {
         //generate links and output links to csv
         LinkMatrix linkMatrix = new LinkMatrix(simMatrix, matchType);
         linkMatrix.exportLinks(highLevelRequirements, lowLevelRequirements);
+
+        // TODO: Compute the matrix after links are exported, now we get the matrix of the old links.
+        ConfusionMatrix matrix = new ConfusionMatrix();
+        ConfusionMatrixGenerator matrixGenerator = new ConfusionMatrixGenerator();
+        matrixGenerator.generate(matrix, datasetName);
+
+
+        System.out.println("Recall: " + matrix.getRecall());
+        System.out.println("Precision: " + matrix.getPrecision());
+        System.out.println("F-Measure: " + matrix.getFMeasure());
     }
 }

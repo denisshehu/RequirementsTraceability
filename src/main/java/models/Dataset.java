@@ -3,7 +3,7 @@ package models;
 import java.util.ArrayList;
 
 public class Dataset {
-    ArrayList<Requirement> requirements;
+    private ArrayList<Requirement> requirements;
 
     public ArrayList<Requirement> getRequirements() {
         return requirements;
