@@ -5,6 +5,7 @@ import models.Requirement;
 import models.RequirementLevel;
 import smile.nlp.dictionary.EnglishStopWords;
 import smile.nlp.stemmer.LancasterStemmer;
+import smile.nlp.stemmer.PorterStemmer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,7 +50,7 @@ public class DatasetProcessor {
 
     private ArrayList<String> preprocess(String text) {
         ArrayList<String> result = tokenize(text);
-        result.removeIf(EnglishStopWords.DEFAULT::contains);
+        result.removeIf(EnglishStopWords.GOOGLE::contains);
 
         LancasterStemmer stemmer = new LancasterStemmer();
 
