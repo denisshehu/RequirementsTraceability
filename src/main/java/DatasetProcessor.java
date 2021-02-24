@@ -5,7 +5,6 @@ import models.Requirement;
 import models.RequirementLevel;
 import smile.nlp.dictionary.EnglishStopWords;
 import smile.nlp.stemmer.LancasterStemmer;
-import smile.nlp.stemmer.PorterStemmer;
 
 import java.io.IOException;
 import java.io.InputStream;

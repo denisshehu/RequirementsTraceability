@@ -69,6 +69,8 @@ public class ConfusionMatrixGenerator {
             Link manuallyComputedLink = manuallyComputedLinks.get(i);
             Link automaticallyComputedLink = automaticallyComputedLinks.get(i);
 
+            String row = manuallyComputedLink.getHighLevelRequirement() + ": ";
+
             for (String lowLevelRequirement : lowLevelRequirements) {
                 boolean isInManual = manuallyComputedLink.getLowLevelRequirements().contains(lowLevelRequirement);
                 boolean isInAutomatic = automaticallyComputedLink.getLowLevelRequirements()
@@ -77,17 +79,23 @@ public class ConfusionMatrixGenerator {
                 if (isInManual) {
                     if (isInAutomatic) {
                         matrix.incrementTP();
+                        row += lowLevelRequirement + ", ";
                     } else {
                         matrix.incrementFN();
+                        row += lowLevelRequirement + ", ";
                     }
                 } else {
                     if (isInAutomatic) {
                         matrix.incrementFP();
+                        row += lowLevelRequirement + ", ";
                     } else {
                         matrix.incrementTN();
+                        row += lowLevelRequirement + ", ";
                     }
                 }
             }
+            row = row.substring(0, row.length() - 2);
+//            System.out.println(row);
         }
     }
 }

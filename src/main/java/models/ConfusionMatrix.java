@@ -59,4 +59,13 @@ public class ConfusionMatrix {
 
         return 2 * (precision * recall) / (precision + recall);
     }
+
+    public void printMatrix() {
+        System.out.println("TP, FN: " + truePositives + ", " + falseNegatives);
+        System.out.println("FP, TN: " + falsePositives + ", " + trueNegatives);
+        System.out.println();
+        System.out.println("Recall: " + getRecall());
+        System.out.println("Precision: " + getPrecision());
+        System.out.println("F-Measure: " + getFMeasure());
+    }
 }
