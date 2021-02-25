@@ -18,7 +18,7 @@ public class RequirementsTraceability {
             }
         }
 
-        String datasetName = "dataset-1";
+        String datasetName = "input";
         execute(datasetName);
     }
 

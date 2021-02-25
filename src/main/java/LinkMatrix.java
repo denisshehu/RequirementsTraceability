@@ -3,8 +3,11 @@ import models.Requirement;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class LinkMatrix {
     private final SimilarityMatrix simMatrix;
@@ -28,10 +31,14 @@ public class LinkMatrix {
      */
     public void exportLinks(ArrayList<Requirement> highLevelRequirements, ArrayList<Requirement> lowLevelRequirements) {
 
+        String fileDirectory = "output/links.csv";
+        if (!isRunningInsideDocker()) {
+            fileDirectory = "src/main/resources/" + fileDirectory;
+        }
         try {
             // TODO: Use OutputStreamWriter (instead of FileWriter) because now this code does not work on docker!
             // TODO: Only use double quotes for the list of low level requirements, just like the given links.csv file.
-            CSVWriter writer = new CSVWriter(new FileWriter("src/main/resources/output/links.csv"));
+            CSVWriter writer = new CSVWriter(new FileWriter(fileDirectory));
 
             ArrayList<String[]> links = new ArrayList<>();
             links.add(new String[] {"id", "links"});
@@ -62,6 +69,18 @@ public class LinkMatrix {
             e.printStackTrace();
         }
 
+    }
+
+    /*
+    Checks whether the tool is running inside Docker or not.
+     */
+    private static Boolean isRunningInsideDocker() {
+
+        try (Stream<String> stream = Files.lines(Paths.get("/proc/1/cgroup"))) {
+            return stream.anyMatch(line -> line.contains("/docker"));
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     /*
@@ -166,16 +185,5 @@ public class LinkMatrix {
         }
 
         return Math.sqrt(squaredDifference / array.length);
-    }
-
-    private void printArray(double[] array) {
-        System.out.print("[ ");
-        for (int i = 0; i < array.length; i++) {
-            if (i == array.length - 1) {
-                System.out.println(array[i] + " ]");
-            } else {
-                System.out.print(array[i] + ", ");
-            }
-        }
     }
 }
